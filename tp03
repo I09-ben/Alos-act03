@@ -1,0 +1,29 @@
+const express = require('express')
+const app = express()
+
+app.use(loggingMiddleware)
+
+app.get(db.json,(req,res) => {
+    res.send('Home  Page')
+})
+
+app.get ('/Users',authorizeUsersAccess,(req ,res)=>{
+    console.log(req.db)
+    res.send('User Page')
+})
+function loggingMiddleware(req, res, next){
+    console.log('${new Date().toISOString()} ${req.originalUrl}')
+    next()
+}
+function authorizeUsersAccess(req, res, next){
+    console.log('authorizeUsersAccess Middleware')
+    if(req.query.db==='true'){
+        req.db = true
+        next()
+    }else {
+        res.send('ERROR:db??')
+    }
+    next()
+}
+app.listen(3000,() => console.log('server started'))
+
